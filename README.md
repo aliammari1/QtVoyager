@@ -40,7 +40,7 @@ This project requires the following dependencies:
 
 To install this project, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/interface-gestion-de-voyages-Qt-Cpp.git`
+1. Clone the repository: `git clone https://github.com/aliammari1/QtVoyager.git`
 2. Open the `mainwindow.cpp` file in Qt Creator
 3. Build and run the project
 
@@ -65,4 +65,4 @@ For more information on how to contribute to this project, please see our [contr
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for more information.
+Read the `LICENSE` file for more information.
