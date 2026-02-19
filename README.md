@@ -65,4 +65,4 @@ For more information on how to contribute to this project, please see our [contr
 
 ## License
 
-Read the `LICENSE` file for more information.
+This project is licensed under a custom **COMMERCIAL USE LICENSE**, which includes restrictions on commercial use. Please refer to the `LICENSE` file for the full terms and conditions.
