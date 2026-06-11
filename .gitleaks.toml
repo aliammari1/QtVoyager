@@ -1,0 +1,31 @@
+# gitleaks configuration for QtVoyager.
+# Extends the default ruleset and adds project-specific rules so the kind of
+# hardcoded ODBC credentials that previously lived in config/connection.cpp
+# (DB name "Projet2A", user "Ali", a literal password) are caught going forward.
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "qt-setpassword-literal"
+description = "Hardcoded password passed to QSqlDatabase::setPassword"
+regex = '''setPassword\s*\(\s*"[^"]+"\s*\)'''
+tags = ["qt", "sql", "credentials"]
+
+[[rules]]
+id = "qt-setusername-literal"
+description = "Hardcoded username passed to QSqlDatabase::setUserName"
+regex = '''setUserName\s*\(\s*"[^"]+"\s*\)'''
+tags = ["qt", "sql", "credentials"]
+
+[allowlist]
+description = "Ignore documentation placeholders and the example env file"
+paths = [
+  '''\.env\.example$''',
+  '''docs/.*''',
+  '''README\.md$''',
+]
+regexes = [
+  '''your_db_password''',
+  '''your_db_user''',
+]

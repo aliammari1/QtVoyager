@@ -1,0 +1,43 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    # Run on PRs, or when someone types "@claude" in a comment.
+    if: >
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' &&
+       contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this Qt/C++ pull request. Be terse and high-signal.
+            Prioritize, in order:
+              1. SQL injection: any QSqlQuery built by string concatenation or
+                 QString::arg interpolation instead of prepare() + bindValue().
+                 Flag every "SELECT/INSERT/UPDATE/DELETE ... '" + var pattern.
+              2. Hardcoded credentials/secrets: literal arguments to
+                 setUserName/setPassword/setDatabaseName, API keys, or anything
+                 that should come from env/QSettings.
+              3. Qt resource/memory issues (un-parented QObjects, leaked
+                 QNetworkReply, missing deleteLater).
+            Approve quickly if none of the above are present.
