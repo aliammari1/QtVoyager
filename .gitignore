@@ -91,3 +91,6 @@ build-*/
 # Test binaries
 tests/tests
 tests/tests.exe
+
+# mkdocs build output
+site/

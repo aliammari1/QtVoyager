@@ -1,68 +1,94 @@
-# Interface Gestion de Voyages
+# QtVoyager
 
-Welcome to the Interface Gestion de Voyages project! This is a Qt C++ application that provides an interface for managing travel data. The main functionality is implemented in the `mainwindow.cpp` file.
+A Qt 5.15 C++ desktop application for managing travel/flight records, with
+ODBC storage, Qt Charts analytics, PDF export, and **RFID traveler check-in**
+over an Arduino serial reader.
 
-![Preview Image](./assets/images/preview.png)
+<!-- TODO: render and commit assets/banner.png per BANNER.md, then embed it here. -->
+<!-- ![QtVoyager](assets/banner.png) -->
 
-## Table of Contents
+![Preview](assets/images/preview.png)
 
-- [Features](#features)
-- [Getting Started](#getting-started)
-    - [Dependencies](#dependencies)
-    - [Installation](#installation)
-    - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+[![CI](https://github.com/aliammari1/QtVoyager/actions/workflows/ci.yml/badge.svg)](https://github.com/aliammari1/QtVoyager/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/aliammari1/QtVoyager/branch/main/graph/badge.svg)](https://codecov.io/gh/aliammari1/QtVoyager)
+[![License: Source-Available](https://img.shields.io/badge/license-Source--Available-blue)](LICENSE)
+![Qt](https://img.shields.io/badge/Qt-5.15-41cd52?logo=qt)
+![C++17](https://img.shields.io/badge/C%2B%2B-17-00599c?logo=cplusplus)
 
 ## Features
 
-- Search for travel data by date, airline, amount, and number of people
-- Sort travel data by various criteria
-- Calculate the average cost of travel between two locations
-- Display the total profit earned from all travel bookings
-- Read RFID card data and display the corresponding traveler information
-- Display a graphical animation of a plane flying across the screen
+- Full CRUD over flight records (`VOYAGES`)
+- Search and multi-field sorting
+- Average cost between two locations and total-profit analytics
+- Qt Charts visualizations and animated flight graphic
+- RFID card lookup of travelers (`VOYAGEURS`) via a serial Arduino reader
+- Opt-in AI **flight insights** over aggregated bookings (Anthropic API,
+  user-supplied key — disabled with no key)
 
-## Getting Started
+## Tech stack
 
-### Dependencies
+Qt 5.15 (`widgets`, `sql`/ODBC, `charts`, `serialport`, `printsupport`,
+`network`), C++17. Builds with **qmake** *or* **CMake** (Qt6-ready).
 
-This project requires the following dependencies:
+## Quickstart
 
-- Qt 5.15.2 or later
-- QtCharts
-- QtGraphics
-- QtTimer
-- QtArdiuno
-- QtSqlDatabase
+```bash
+git clone https://github.com/aliammari1/QtVoyager.git
+cd QtVoyager
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+# binary: build/GestionDeVoyages
+```
 
-### Installation
+qmake also works: `qmake GestionDeVoyages.pro && make`.
 
-To install this project, follow these steps:
+Configure the database via environment variables (no credentials are
+hardcoded) — copy `.env.example` and set `QTVOYAGER_DB_*`. For a quick local
+run with SQLite:
 
-1. Clone the repository: `git clone https://github.com/aliammari1/QtVoyager.git`
-2. Open the `mainwindow.cpp` file in Qt Creator
-3. Build and run the project
+```bash
+export QTVOYAGER_DB_DRIVER=QSQLITE
+export QTVOYAGER_DB_NAME=qtvoyager.db
+```
 
-### Usage
+See the [docs](docs/index.md) for ODBC/DSN setup, Arduino/RFID wiring, and
+per-OS build notes.
 
-To use this application, simply run the executable file. The interface will be displayed, and you can use the various buttons and fields to interact with the travel data.
+## Tests
+
+```bash
+cmake -S . -B build -DBUILD_TESTING=ON && cmake --build build --parallel
+QT_QPA_PLATFORM=offscreen ctest --test-dir build --output-on-failure
+```
+
+Tests run against an **in-memory QSQLITE** database (no DSN needed) and cover
+CRUD, cost/profit math, and a SQL-injection regression for the RFID and
+flight-ref lookups.
+
+## Security
+
+Database access is fully parameterized and credentials are externalized to
+env/`QSettings`. CI runs **gitleaks**, **CodeQL**, and clang-format/clang-tidy.
+See [`docs/security.md`](docs/security.md) and [`SECURITY.md`](SECURITY.md).
+
+## Engineering decisions
+
+- **Source-available, not OSS:** the owner monetizes a commercial license via
+  Ko-fi; the SPDX id `LicenseRef-Source-Available-1.0` makes GitHub recognize
+  the chip while keeping the code portfolio-visible.
+- **qmake kept, CMake added:** CMake is the path to Qt 6 and cleaner CI, but the
+  original qmake build is preserved and CI verifies both.
+- **Cloudflare Pages for docs only:** the app is a native desktop binary
+  shipped via GitHub Releases; only the mkdocs site deploys to CF Pages.
 
 ## Contributing
 
-We welcome contributions from everyone! If you find a bug or have a feature request, please open an issue on GitHub. If you would like to contribute code, please follow these steps:
-
-1. Fork the repository by clicking the "Fork" button on GitHub
-2. Clone your forked repository to your local machine
-3. Create a new branch for your changes: `git checkout -b my-new-feature`
-4. Make your changes and commit them: `git commit -am 'Add some feature'`
-5. Push your changes to your forked repository: `git push origin my-new-feature`
-6. Create a pull request by clicking the "New pull request" button on GitHub
-
-Before submitting a pull request, please make sure that your code adheres to the project's coding standards and that all tests pass. We also recommend that you discuss your proposed changes with the project maintainers beforehand to ensure that they align with the project's goals and direction.
-
-For more information on how to contribute to this project, please see our [contributing guidelines](./CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the
+[ROADMAP](ROADMAP.md). Issues and PRs welcome.
 
 ## License
 
-This project is licensed under a custom **COMMERCIAL USE LICENSE**, which includes restrictions on commercial use. Please refer to the `LICENSE` file for the full terms and conditions.
+Source-available under a **Commercial Use License**
+(`LicenseRef-Source-Available-1.0`). Personal, educational, and non-commercial
+use is free; commercial use requires a license — contact
+`ammari.ali.0001@gmail.com`. See [`LICENSE`](LICENSE).
