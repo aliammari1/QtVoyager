@@ -71,7 +71,8 @@ bool Voyage::update(QString ref) const
 bool Voyage::searchByFlightRef(QString ref) const
 {
     QSqlQuery query;
-    query.prepare("SELECT * FROM VOYAGES WHERE FLIGHTREF= '" + ref + "'");
+    query.prepare("SELECT * FROM VOYAGES WHERE FLIGHTREF = :ref");
+    query.bindValue(":ref", ref);
     return query.exec();
 }
 

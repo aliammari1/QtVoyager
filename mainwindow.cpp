@@ -412,7 +412,9 @@ void MainWindow::update_label()
     if (data != "" && data.length() > 10)
     {
         QSqlQuery query;
-        query.exec("SELECT * FROM VOYAGEURS WHERE RFID_CARD = '" + data + "'");
+        query.prepare("SELECT * FROM VOYAGEURS WHERE RFID_CARD = :rfid");
+        query.bindValue(":rfid", QString::fromUtf8(data));
+        query.exec();
         query.first();
         qDebug() << query.value(1).toByteArray();
         A.write_to_arduino(query.value(1).toByteArray());
