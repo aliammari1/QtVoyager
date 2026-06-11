@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
+#include <QSqlQuery>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -401,6 +403,47 @@ void MainWindow::profit()
         it++;
     }
     ui->label_profit->setText(QString::number(earn));
+}
+
+
+void MainWindow::requestFlightInsights()
+{
+    // Opt-in: requires the user's own Anthropic key. Bail out early with a
+    // clear message (no network call) when no key is configured.
+    if (!FlightInsights::hasApiKey())
+    {
+        QMessageBox::information(
+            this, tr("Flight Insights"),
+            tr("AI flight insights are opt-in. Set the ANTHROPIC_API_KEY "
+               "environment variable (or the 'ai/anthropic_api_key' QSettings "
+               "key) with your own Anthropic API key to enable this feature."));
+        return;
+    }
+
+    // Build a compact, anonymized summary: per-route count and average cost.
+    QString summary;
+    QSqlQuery query("SELECT LIEUDEP, LIEUARR, COUNT(*), AVG(MONTANT), SUM(MONTANT*NBPER) "
+                    "FROM VOYAGES GROUP BY LIEUDEP, LIEUARR");
+    while (query.next())
+    {
+        summary += QString("%1 -> %2: %3 flights, avg cost %4, revenue %5\n")
+                       .arg(query.value(0).toString(),
+                            query.value(1).toString(),
+                            query.value(2).toString(),
+                            QString::number(query.value(3).toDouble(), 'f', 2),
+                            QString::number(query.value(4).toDouble(), 'f', 2));
+    }
+    if (summary.isEmpty())
+        summary = tr("(no flight records)");
+
+    connect(&insights, &FlightInsights::insightsReady, this, [this](const QString &text) {
+        QMessageBox::information(this, tr("Flight Insights"), text);
+    });
+    connect(&insights, &FlightInsights::failed, this, [this](const QString &reason) {
+        QMessageBox::warning(this, tr("Flight Insights"), reason);
+    });
+
+    insights.requestInsights(summary);
 }
 
 
