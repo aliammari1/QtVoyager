@@ -15,7 +15,9 @@ namespace {
 // available default; users can override it via QSettings "ai/model".
 const char *kAnthropicEndpoint = "https://api.anthropic.com/v1/messages";
 const char *kAnthropicVersion = "2023-06-01";
-const char *kDefaultModel = "claude-3-5-haiku-latest";
+// Current, valid model id (see Anthropic model catalog). Users may override
+// via QSettings "ai/model".
+const char *kDefaultModel = "claude-haiku-4-5";
 }
 
 FlightInsights::FlightInsights(QObject *parent)
