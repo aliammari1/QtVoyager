@@ -4,16 +4,47 @@ A Qt 5.15 C++ desktop application for managing travel/flight records, with
 ODBC storage, Qt Charts analytics, PDF export, and **RFID traveler check-in**
 over an Arduino serial reader.
 
-<!-- TODO: render and commit assets/banner.png per BANNER.md, then embed it here. -->
-<!-- ![QtVoyager](assets/banner.png) -->
-
-![Preview](assets/images/preview.png)
+<!-- Banner: render assets/banner.png per BANNER.md, then this hero shows it. -->
+![QtVoyager](assets/banner.png)
 
 [![CI](https://github.com/aliammari1/QtVoyager/actions/workflows/ci.yml/badge.svg)](https://github.com/aliammari1/QtVoyager/actions/workflows/ci.yml)
+[![Release](https://github.com/aliammari1/QtVoyager/actions/workflows/release.yml/badge.svg)](https://github.com/aliammari1/QtVoyager/releases)
+[![Docs](https://github.com/aliammari1/QtVoyager/actions/workflows/docs.yml/badge.svg)](https://github.com/aliammari1/QtVoyager/actions/workflows/docs.yml)
 [![codecov](https://codecov.io/gh/aliammari1/QtVoyager/branch/main/graph/badge.svg)](https://codecov.io/gh/aliammari1/QtVoyager)
 [![License: Source-Available](https://img.shields.io/badge/license-Source--Available-blue)](LICENSE)
 ![Qt](https://img.shields.io/badge/Qt-5.15-41cd52?logo=qt)
 ![C++17](https://img.shields.io/badge/C%2B%2B-17-00599c?logo=cplusplus)
+![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-555)
+
+## Screenshots
+
+> Desktop GUI — flight CRUD, analytics, and RFID check-in.
+
+![QtVoyager main window](assets/images/preview.png)
+
+<!-- TODO: record a short screen capture of CRUD + charts + RFID lookup and
+     commit it as assets/images/demo.gif, then this line will render it. -->
+<!-- ![QtVoyager demo](assets/images/demo.gif) -->
+
+## Download
+
+QtVoyager is a **native desktop app** — grab a packaged installer for your OS
+from the [**Releases**](https://github.com/aliammari1/QtVoyager/releases) page
+(built automatically on each tagged release):
+
+| OS | Artifact | Built with |
+|----|----------|-----------|
+| Windows | `QtVoyager-windows.zip` (portable, Qt DLLs bundled) | `windeployqt` |
+| macOS | `QtVoyager-macos.dmg` | `macdeployqt` |
+| Linux | `QtVoyager-linux.AppImage` | `linuxdeployqt` |
+
+Prefer to build from source? See [Quickstart](#quickstart) below.
+
+> **Note on the demo:** because this is a Qt desktop binary, there is no live web
+> demo — the demo *is* the downloadable installer above plus the screenshots and
+> GIF. The [documentation site](https://github.com/aliammari1/QtVoyager) is built
+> with **mkdocs-material** and deployed to **Cloudflare Pages** (Pages hosts the
+> docs only; it cannot run a native Qt application).
 
 ## Features
 
@@ -42,6 +73,15 @@ cmake --build build --parallel
 
 qmake also works: `qmake GestionDeVoyages.pro && make`.
 
+**Prerequisites:** Qt 5.15.2 with the `qtcharts` and `qtserialport` add-ons, a
+C++17 compiler, and an ODBC manager.
+
+| OS | Get Qt + deps | Build & run |
+|----|---------------|-------------|
+| **Windows** | Qt online installer (MSVC/MinGW kit); ODBC is built in | `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build`, then run `build\GestionDeVoyages.exe` |
+| **macOS** | `brew install qt@5 unixodbc` (or Qt installer) | `cmake -S . -B build && cmake --build build`, then `open build/GestionDeVoyages.app` |
+| **Linux** | `qtcharts`, `qtserialport`, `unixodbc` from your package manager; add user to `dialout` for serial RFID | `cmake -S . -B build && cmake --build build && ./build/GestionDeVoyages` |
+
 Configure the database via environment variables (no credentials are
 hardcoded) — copy `.env.example` and set `QTVOYAGER_DB_*`. For a quick local
 run with SQLite:
@@ -51,7 +91,7 @@ export QTVOYAGER_DB_DRIVER=QSQLITE
 export QTVOYAGER_DB_NAME=qtvoyager.db
 ```
 
-See the [docs](docs/index.md) for ODBC/DSN setup, Arduino/RFID wiring, and
+See the [docs](docs/index.md) for full ODBC/DSN setup, Arduino/RFID wiring, and
 per-OS build notes.
 
 ## Tests
@@ -86,9 +126,27 @@ See [`docs/security.md`](docs/security.md) and [`SECURITY.md`](SECURITY.md).
 See [CONTRIBUTING.md](CONTRIBUTING.md) and the
 [ROADMAP](ROADMAP.md). Issues and PRs welcome.
 
+## Support / commercial license
+
+Personal, educational, and non-commercial use is free. If you use QtVoyager
+commercially, please obtain a commercial license:
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support%20%2F%20commercial%20license-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/aliammari)
+
+Support development or buy a commercial license via
+[**Ko-fi**](https://ko-fi.com/aliammari), or email
+`ammari.ali.0001@gmail.com`.
+
 ## License
 
 Source-available under a **Commercial Use License**
 (`LicenseRef-Source-Available-1.0`). Personal, educational, and non-commercial
 use is free; commercial use requires a license — contact
 `ammari.ali.0001@gmail.com`. See [`LICENSE`](LICENSE).
+
+---
+
+**Topics:** `qt` · `cpp` · `desktop` · `rfid` · `qmake` · `cmake` · `qtcharts` · `odbc`
+<!-- Set these as GitHub repo topics in Settings for discoverability. -->
+**Share it:** post a *Show & Tell* on the Qt Forum and a "Qt + RFID desktop app"
+note on dev.to to drive traffic.
