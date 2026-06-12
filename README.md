@@ -1,16 +1,25 @@
 # QtVoyager
 
-A Qt 5.15 C++ desktop application for managing travel/flight records, with
-ODBC storage, Qt Charts analytics, PDF export, and **RFID traveler check-in**
-over an Arduino serial reader.
+> **Qt desktop travel-management app with RFID check-in + cost analytics.**
 
 <!-- Banner: render assets/banner.png per BANNER.md, then this hero shows it. -->
 ![QtVoyager](assets/banner.png)
+
+<p align="center">
+  <a href="https://github.com/aliammari1/QtVoyager/releases"><b>⬇ Download for your OS</b></a> ·
+  <a href="https://github.com/aliammari1/QtVoyager"><b>📖 Docs</b></a> ·
+  <a href="https://github.com/aliammari1/QtVoyager/stargazers"><b>⭐ Star this repo</b></a>
+</p>
+
+A Qt 5.15 C++ desktop application for managing travel/flight records, with
+ODBC storage, Qt Charts analytics, PDF export, and **RFID traveler check-in**
+over an Arduino serial reader. **If it's useful, a ⭐ helps a lot.**
 
 [![CI](https://github.com/aliammari1/QtVoyager/actions/workflows/ci.yml/badge.svg)](https://github.com/aliammari1/QtVoyager/actions/workflows/ci.yml)
 [![Release](https://github.com/aliammari1/QtVoyager/actions/workflows/release.yml/badge.svg)](https://github.com/aliammari1/QtVoyager/releases)
 [![Docs](https://github.com/aliammari1/QtVoyager/actions/workflows/docs.yml/badge.svg)](https://github.com/aliammari1/QtVoyager/actions/workflows/docs.yml)
 [![codecov](https://codecov.io/gh/aliammari1/QtVoyager/branch/main/graph/badge.svg)](https://codecov.io/gh/aliammari1/QtVoyager)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/aliammari1/QtVoyager/badge)](https://scorecard.dev/viewer/?uri=github.com/aliammari1/QtVoyager)
 [![License: Source-Available](https://img.shields.io/badge/license-Source--Available-blue)](LICENSE)
 ![Qt](https://img.shields.io/badge/Qt-5.15-41cd52?logo=qt)
 ![C++17](https://img.shields.io/badge/C%2B%2B-17-00599c?logo=cplusplus)
@@ -37,6 +46,13 @@ from the [**Releases**](https://github.com/aliammari1/QtVoyager/releases) page
 | Windows | `QtVoyager-windows.zip` (portable, Qt DLLs bundled) | `windeployqt` |
 | macOS | `QtVoyager-macos.dmg` | `macdeployqt` |
 | Linux | `QtVoyager-linux.AppImage` | `linuxdeployqt` |
+
+Every installer ships with **SLSA build provenance** (signed via
+`actions/attest-build-provenance`). Verify a download came from this repo's CI:
+
+```bash
+gh attestation verify QtVoyager-windows.zip -R aliammari1/QtVoyager
+```
 
 Prefer to build from source? See [Quickstart](#quickstart) below.
 
@@ -143,6 +159,19 @@ Source-available under a **Commercial Use License**
 (`LicenseRef-Source-Available-1.0`). Personal, educational, and non-commercial
 use is free; commercial use requires a license — contact
 `ammari.ali.0001@gmail.com`. See [`LICENSE`](LICENSE).
+
+## Related projects
+
+Part of [@aliammari1](https://github.com/aliammari1)'s portfolio — other
+desktop / systems work you might like:
+
+- [rakcha](https://github.com/aliammari1/rakcha) — polyglot cinema platform
+  (JavaFX + Symfony + Flutter) with `jpackage` installers
+- [Gold-Rush](https://github.com/aliammari1/Gold-Rush) — a 2D platformer in
+  pure C/SDL that plays in the browser via WASM
+- See the [profile hub](https://github.com/aliammari1) for the full ecosystem.
+
+See [GROWTH.md](GROWTH.md) for how this project is shared and grown.
 
 ---
 

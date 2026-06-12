@@ -80,6 +80,14 @@
   - [ ] Biometric authentication
   - [ ] Smart badge management
 
+#### 2.4 Reliability & Observability (backlog)
+- [ ] **Desktop crash reporting** — integrate **Sentry-native** or
+  **Google Crashpad/Breakpad** to capture minidumps from released installers
+  (opt-in, symbol upload in the release workflow). Highest-ROI reliability
+  signal for a shipped native binary; not yet wired.
+- [x] **Supply-chain hardening** — SLSA build provenance on installers,
+  OpenSSF Scorecard, SHA-pinned actions, QtTest coverage gate (done).
+
 ### 🚀 Phase 3: Cloud Integration & Collaboration (Q1 2027) 📅
 **Duration**: January - March 2027
 **Goal**: Cloud connectivity and team collaboration
