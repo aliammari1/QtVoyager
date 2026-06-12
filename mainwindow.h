@@ -18,6 +18,7 @@
 #include "gestionVoyages/voyage.h"
 #include "config/arduino.h"
 #include "config/connection.h"
+#include "ai/flightinsights.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -40,6 +41,10 @@ public:
     void table(QString type = "",QString text = "");
     void profit();
     void graphics();
+
+    // Opt-in AI insights over the VOYAGES table. Does nothing harmful without
+    // an Anthropic API key (shows a friendly message instead).
+    void requestFlightInsights();
 
 private slots:
 
@@ -67,6 +72,7 @@ private:
     Voyage voy;
     QByteArray data;
     Arduino A;
+    FlightInsights insights;
     double lineargradx = 1;
     double lineargrady = 1;
 };

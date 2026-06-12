@@ -1,0 +1,18 @@
+---
+# QtVoyager C++ style. Allman braces match the existing codebase.
+Language: Cpp
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 120
+BreakBeforeBraces: Allman
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+PointerAlignment: Right
+SpaceAfterCStyleCast: true
+SortIncludes: false
+NamespaceIndentation: None
+AccessModifierOffset: -4
+...

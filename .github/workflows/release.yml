@@ -1,0 +1,135 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build-installer:
+    name: Package (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      id-token: write # required for build-provenance attestation (Sigstore OIDC)
+      attestations: write # required to write the provenance attestation
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: QtVoyager-windows
+          - os: ubuntu-latest
+            artifact: QtVoyager-linux
+          - os: macos-latest
+            artifact: QtVoyager-macos
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Install Qt 5.15
+        uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730 # v4.3.1
+        with:
+          version: "5.15.2"
+          modules: "qtcharts qtserialport"
+          cache: true
+
+      - name: Build (Release)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+          cmake --build build --config Release --parallel
+
+      # --- Windows: windeployqt + zip ------------------------------------
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $dist = "dist/QtVoyager"
+          New-Item -ItemType Directory -Force -Path $dist | Out-Null
+          $exe = Get-ChildItem -Recurse -Filter GestionDeVoyages.exe build | Select-Object -First 1
+          Copy-Item $exe.FullName "$dist/"
+          windeployqt --release "$dist/GestionDeVoyages.exe"
+          Compress-Archive -Path "$dist/*" -DestinationPath "${{ matrix.artifact }}.zip"
+
+      # --- Linux: linuxdeployqt AppImage ---------------------------------
+      - name: Package (Linux AppImage)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libfuse2 file
+          wget -q -O linuxdeployqt https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          chmod +x linuxdeployqt
+          mkdir -p AppDir/usr/bin
+          BIN=$(find build -name GestionDeVoyages -type f | head -n1)
+          cp "$BIN" AppDir/usr/bin/
+          cat > AppDir/usr/share/applications/qtvoyager.desktop <<'DESKTOP'
+          [Desktop Entry]
+          Type=Application
+          Name=QtVoyager
+          Exec=GestionDeVoyages
+          Icon=qtvoyager
+          Categories=Utility;
+          DESKTOP
+          cp assets/images/plane.png AppDir/qtvoyager.png || true
+          ./linuxdeployqt AppDir/usr/share/applications/qtvoyager.desktop -appimage || true
+          mv ./*.AppImage "${{ matrix.artifact }}.AppImage" || true
+        continue-on-error: true
+
+      # --- macOS: macdeployqt dmg ----------------------------------------
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          APP=$(find build -name "GestionDeVoyages.app" -maxdepth 3 | head -n1)
+          if [ -z "$APP" ]; then
+            echo "No .app bundle produced; packaging raw binary"
+            BIN=$(find build -name GestionDeVoyages -type f | head -n1)
+            zip -j "${{ matrix.artifact }}.zip" "$BIN"
+          else
+            macdeployqt "$APP" -dmg
+            mv "$(dirname "$APP")"/*.dmg "${{ matrix.artifact }}.dmg" || \
+              zip -r "${{ matrix.artifact }}.zip" "$APP"
+          fi
+        continue-on-error: true
+
+      # --- SLSA build provenance for the packaged installers -------------
+      # Generates a signed, verifiable attestation tying each installer to
+      # this workflow run / commit. Verify with: gh attestation verify <file> -R aliammari1/QtVoyager
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
+        with:
+          subject-path: |
+            ${{ matrix.artifact }}.zip
+            ${{ matrix.artifact }}.AppImage
+            ${{ matrix.artifact }}.dmg
+        continue-on-error: true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            ${{ matrix.artifact }}.zip
+            ${{ matrix.artifact }}.AppImage
+            ${{ matrix.artifact }}.dmg
+          if-no-files-found: ignore
+
+  release:
+    name: Publish GitHub Release
+    needs: build-installer
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true

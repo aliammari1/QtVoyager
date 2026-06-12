@@ -1,0 +1,21 @@
+---
+# Focused on correctness and the security-relevant patterns for this repo
+# (no raw SQL string-building, modern C++ usage). Noisy/cosmetic checks are
+# disabled so CI signal stays meaningful.
+Checks: >
+  bugprone-*,
+  cppcoreguidelines-pro-type-member-init,
+  cppcoreguidelines-slicing,
+  modernize-use-nullptr,
+  modernize-use-override,
+  modernize-use-equals-default,
+  performance-*,
+  readability-redundant-*,
+  readability-misleading-indentation,
+  -bugprone-easily-swappable-parameters,
+  -performance-no-int-to-ptr
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
+...

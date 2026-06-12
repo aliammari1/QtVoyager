@@ -77,3 +77,27 @@ Thumbs.db
 
 GestionDeVoyages
 compile_commands.json
+
+# Local environment / secrets (never commit populated credentials)
+.env
+*.env
+!.env.example
+
+# Build directories
+build/
+build-*/
+.cache/
+
+# Test binaries
+tests/tests
+tests/tests.exe
+
+# mkdocs build output
+site/
+# Internal growth/marketing notes (not for public)
+GROWTH.md
+BANNER.md
+SUBMITTING_TO_AWESOME.md
+launch-kit.md
+star-strategy.md
+modernization-backlog.md

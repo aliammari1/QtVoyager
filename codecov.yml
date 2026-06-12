@@ -1,0 +1,23 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 2%
+    patch:
+      default:
+        target: 70%
+        threshold: 5%
+
+# Only the first-party logic that the QtTest suite exercises.
+component_management:
+  individual_components: []
+
+ignore:
+  - "tests/**"
+  - "assets/**"
+  - "mainwindow.ui"
+
+comment:
+  layout: "reach, diff, flags, files"
+  require_changes: true

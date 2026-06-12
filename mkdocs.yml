@@ -1,0 +1,43 @@
+site_name: QtVoyager
+site_description: A Qt 5 C++ desktop travel-management app with RFID integration
+site_author: Ali Ammari
+repo_url: https://github.com/aliammari1/QtVoyager
+repo_name: aliammari1/QtVoyager
+copyright: Copyright &copy; 2023-2026 Ali Ammari
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Building: building.md
+  - Database (ODBC/DSN): database.md
+  - Arduino / RFID Wiring: rfid.md
+  - Security: security.md

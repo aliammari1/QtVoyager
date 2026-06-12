@@ -8,23 +8,24 @@
 
 **Mission**: Provide a robust, feature-rich desktop application that simplifies travel management through intuitive interfaces, advanced analytics, and cutting-edge technology integration.
 
-## 🎯 Current Status (January 2025)
+## 🎯 Current Status (June 2026)
 
-- ✅ Core Qt-based GUI framework implemented
+- ✅ Core Qt 5.15 GUI framework implemented
 - ✅ Advanced search and sorting capabilities
 - ✅ Cost analysis and reporting features
-- ✅ RFID integration for enhanced user experience
-- ✅ Cross-platform compatibility (Windows, Linux, macOS)
-- ✅ 9 GitHub stars and growing community
-- ✅ MIT License and open source
+- ✅ RFID integration via Arduino serial reader
+- ✅ Cross-platform build (Windows, Linux, macOS) — qmake **and** CMake
+- ✅ Parameterized SQL + externalized credentials (security hardened)
+- ✅ QtTest suite (in-memory QSQLITE) with CI on a 3-OS matrix
+- ✅ Source-available under a Commercial Use License
 
 ---
 
 ## 🗓️ Development Roadmap
 
-### 🏗️ Phase 1: Core Foundation (Q1 2025) ✅
+### 🏗️ Phase 1: Core Foundation ✅
 **Status**: Completed
-**Duration**: January - March 2025
+**Duration**: 2023 - 2025
 
 #### Achievements
 - [x] Qt application framework setup
@@ -36,9 +37,9 @@
 - [x] Database abstraction layer
 - [x] Cross-platform build system
 
-### 🌟 Phase 2: Enhanced User Experience (Q2 2025) 🚧
+### 🌟 Phase 2: Enhanced User Experience (H2 2026) 🚧
 **Status**: In Planning
-**Duration**: April - June 2025
+**Duration**: July - December 2026
 **Goal**: Modern UI/UX and improved functionality
 
 #### 2.1 Modern UI Overhaul
@@ -79,8 +80,16 @@
   - [ ] Biometric authentication
   - [ ] Smart badge management
 
-### 🚀 Phase 3: Cloud Integration & Collaboration (Q3 2025) 📅
-**Duration**: July - September 2025
+#### 2.4 Reliability & Observability (backlog)
+- [ ] **Desktop crash reporting** — integrate **Sentry-native** or
+  **Google Crashpad/Breakpad** to capture minidumps from released installers
+  (opt-in, symbol upload in the release workflow). Highest-ROI reliability
+  signal for a shipped native binary; not yet wired.
+- [x] **Supply-chain hardening** — SLSA build provenance on installers,
+  OpenSSF Scorecard, SHA-pinned actions, QtTest coverage gate (done).
+
+### 🚀 Phase 3: Cloud Integration & Collaboration (Q1 2027) 📅
+**Duration**: January - March 2027
 **Goal**: Cloud connectivity and team collaboration
 
 #### 3.1 Cloud Services
@@ -114,9 +123,12 @@
   - [ ] Offline map support
   - [ ] Push notifications
 
-### 🤖 Phase 4: AI & Machine Learning (Q4 2025) 📅
-**Duration**: October - December 2025
+### 🤖 Phase 4: AI & Machine Learning (Q2 2027) 📅
+**Duration**: April - June 2027
 **Goal**: Intelligent features and automation
+
+> The opt-in AI **flight insights** stub (Anthropic Messages API, user-supplied
+> key) already ships in `ai/flightinsights.cpp` as the foundation for this phase.
 
 #### 4.1 Smart Recommendations
 - [ ] **AI-Powered Features**
@@ -149,8 +161,8 @@
   - [ ] Expense report automation
   - [ ] Integration with accounting systems
 
-### 🌐 Phase 5: Enterprise & Scalability (Q1 2026) 📅
-**Duration**: January - March 2026
+### 🌐 Phase 5: Enterprise & Scalability (H2 2027) 📅
+**Duration**: July - December 2027
 **Goal**: Enterprise-ready solution with scalability
 
 #### 5.1 Enterprise Features
@@ -182,11 +194,11 @@
 ## 🛠️ Technical Architecture
 
 ### Current Technology Stack
-- **Framework**: Qt 6.x (C++)
-- **Database**: SQLite, PostgreSQL support
-- **Build System**: CMake, qmake
-- **UI Framework**: Qt Widgets, Qt Quick (planned)
-- **RFID Integration**: Custom C++ libraries
+- **Framework**: Qt 5.15 (C++17)
+- **Database**: ODBC (QODBC); QSQLITE for local runs/tests
+- **Build System**: qmake and CMake (Qt6-ready)
+- **UI Framework**: Qt Widgets, Qt Charts; Qt Quick (planned)
+- **RFID Integration**: Arduino over QtSerialPort
 
 ### Planned Technology Evolution
 - **Frontend**: Qt Quick/QML, Modern C++17/20
@@ -208,13 +220,13 @@
 ## 📊 Success Metrics & KPIs
 
 ### Growth Metrics
-| Metric | Current | Q2 2025 Target | Q4 2025 Target | Q1 2026 Target |
+| Metric | Current | H2 2026 Target | H1 2027 Target | H2 2027 Target |
 |--------|---------|----------------|----------------|----------------|
-| GitHub Stars | 9 | 50 | 150 | 300 |
-| Downloads | N/A | 1,000 | 5,000 | 15,000 |
-| Active Users | N/A | 100 | 1,000 | 3,000 |
+| GitHub Stars | — | 50 | 150 | 300 |
+| Downloads | — | 1,000 | 5,000 | 15,000 |
+| Active Users | — | 100 | 1,000 | 3,000 |
 | Contributors | 1 | 5 | 15 | 25 |
-| Feature Requests | 0 | 20 | 50 | 100 |
+| Feature Requests | — | 20 | 50 | 100 |
 
 ### Technical Metrics
 - **Performance**: <1 second response time
@@ -286,8 +298,8 @@
 - **Edge Computing**: Local AI processing
 
 ### Business Model
-- **Open Source Core**: MIT licensed base features
-- **Enterprise Licensing**: Premium features for businesses
+- **Source-Available Core**: Commercial Use License (free for personal/edu use)
+- **Enterprise Licensing**: Premium features and commercial-use licenses
 - **Support Services**: Professional consultation
 - **Training Programs**: Qt and travel management training
 - **Marketplace**: Plugin and extension ecosystem
@@ -322,7 +334,7 @@
 - **Operating System**: Windows 10+, macOS 10.15+, Linux (Ubuntu 20.04+)
 - **RAM**: 4GB minimum, 8GB recommended
 - **Storage**: 500MB for application, 1GB for data
-- **Qt Version**: 6.2 or later
+- **Qt Version**: 5.15 (Qt 6 supported via CMake)
 - **Compiler**: GCC 9+, Clang 10+, MSVC 2019+
 
 ### Development Environment
@@ -352,9 +364,9 @@
 
 ---
 
-**Last Updated**: January 2025  
-**Next Review**: April 2025  
-**Version**: 2.0  
+**Last Updated**: June 2026  
+**Next Review**: December 2026  
+**Version**: 2.1  
 **Maintainer**: [@aliammari1](https://github.com/aliammari1)
 
 > 📌 **Note**: This roadmap evolves with technology trends and user feedback. We welcome contributions and suggestions from the Qt and travel management communities!

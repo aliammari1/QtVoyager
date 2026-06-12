@@ -1,0 +1,2 @@
+# Pinned per the plan note that Material entered maintenance in Nov 2025.
+mkdocs-material==9.5.49

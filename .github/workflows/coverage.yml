@@ -1,0 +1,59 @@
+name: Coverage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  coverage:
+    name: gcovr + Codecov
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Install Qt 5.15
+        uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730 # v4.3.1
+        with:
+          version: "5.15.2"
+          modules: "qtcharts qtserialport"
+          cache: true
+
+      - name: Install gcovr
+        run: pip install --upgrade gcovr
+
+      - name: Configure with coverage
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Run tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: ctest --test-dir build --output-on-failure
+
+      # Generate the report AND enforce a line-coverage floor on the
+      # first-party logic the QtTest suite exercises. --fail-under-line
+      # makes the job (and therefore the PR check) fail below the threshold.
+      - name: Generate coverage report (with gate)
+        run: |
+          gcovr --root . \
+            --filter 'gestionVoyages/' \
+            --filter 'config/' \
+            --filter 'ai/' \
+            --xml-pretty -o coverage.xml \
+            --fail-under-line 60 \
+            --print-summary
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
